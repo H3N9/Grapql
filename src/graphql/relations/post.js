@@ -1,4 +1,4 @@
-import { PostTC, UserTC } from '../../models'
+import { CommentTC, PostTC, UserTC } from '../../models'
 import moment from 'moment'
 
 
@@ -27,4 +27,14 @@ PostTC.addFields({
       resolve: (source) => source.status+ "Yes",
       projection: {status: 1}
     }
-  })
+})
+PostTC.addRelation(
+    'comments',
+    {
+        resolver: () => CommentTC.getResolver('findMany'),
+        prepareArgs: {
+            filter: (source) => ({postById: source._id})
+        },
+        projection: {_id: 1}
+    }
+)

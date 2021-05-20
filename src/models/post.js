@@ -4,7 +4,7 @@ import { composeWithMongooseDiscriminators } from 'graphql-compose-mongoose'
 const { Schema } = mongoose
 const enumPostType = {
     STATUS: 'StatusPost',
-    PHOTO: 'Photo'
+    PHOTO: 'PhotoPost'
 }
 
 const PostSchema = new Schema({
@@ -13,11 +13,11 @@ const PostSchema = new Schema({
     type: {type: String, enum: Object.keys(enumPostType), require: true}
 })
 
-const StatusSchema = new Schema({
+const StatusPostSchema = new Schema({
     status: {type: String, require: true},
 })
 
-const PhotoSchema = new Schema({
+const PhotoPostSchema = new Schema({
     caption: {type: String, require: true},
     url: {type: String, require: true}
 })
@@ -32,10 +32,10 @@ const discriminatorOptions = {
 
 
 export const PostModel = mongoose.model('Post', PostSchema)
-export const StatusModel = PostModel.discriminator(enumPostType.STATUS, StatusSchema)
-export const PhotoModel = PostModel.discriminator(enumPostType.PHOTO, PhotoSchema)
+export const StatusPostModel = PostModel.discriminator(enumPostType.STATUS, StatusPostSchema)
+export const PhotoPostModel = PostModel.discriminator(enumPostType.PHOTO, PhotoPostSchema)
 
 export const PostTC = composeWithMongooseDiscriminators(PostModel)
-export const StatusTC = PostTC.discriminator(StatusModel, {name: enumPostType.STATUS, ...discriminatorOptions})
-export const PhotoTC = PostTC.discriminator(PhotoModel, {name: enumPostType.PHOTO, ...discriminatorOptions})
+export const StatusPostTC = PostTC.discriminator(StatusPostModel, {name: enumPostType.STATUS, ...discriminatorOptions})
+export const PhotoPostTC = PostTC.discriminator(PhotoPostModel, {name: enumPostType.PHOTO, ...discriminatorOptions})
 export default PostModel
